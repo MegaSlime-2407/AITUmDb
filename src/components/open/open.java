@@ -1,4 +1,4 @@
 package components.open;
 
-public class open {
+public interface open {
 }
