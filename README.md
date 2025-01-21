@@ -1,0 +1,1 @@
+AITU movie database with reviews and films, every user can leave review and rating to a film, open route can just observe all reviews and get all films, admin can delete, add, update films and delete, also admin can delete bad reviews
