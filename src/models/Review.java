@@ -1,13 +1,13 @@
 package models;
 // asd
-public class reviews {
+public class Review {
     private int id;
     private int product_id;
     private int user_id;
     private String description;
     private double rating;
 
-    public reviews(int id, int product_id, int user_id, String description, double rating) {
+    public Review(int id, int product_id, int user_id, String description, double rating) {
         setId(id);
         setProduct_id(product_id);
         setUser_id(user_id);

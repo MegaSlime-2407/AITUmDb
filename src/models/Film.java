@@ -1,13 +1,13 @@
 package models;
 
-public class films {
+public class Film {
     private int film_id;
     private String film_title;
     private String film_genre;
     private double film_rating;
     private String film_description;
 
-    public films(String title, String genre, double rating, String description) {
+    public Film(String title, String genre, double rating, String description) {
         setFilm_title(title);
         setFilm_genre(genre);
         setFilm_rating(rating);

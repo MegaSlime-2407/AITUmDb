@@ -1,10 +1,10 @@
 package components.user;
 
-public class user {
+public class User {
     private int id;
     private String name;
     private String password;
-    public user(int id, String name, String password) {
+    public User(int id, String name, String password) {
         setId(id);
         setName(name);
         setPassword(password);
