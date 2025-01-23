@@ -1,5 +1,9 @@
 package components.open;
 
+import models.Review;
+
+import java.util.List;
+
 public interface open {
-    oifoiudfsoiudffoiufdsio
+    List<Review> getAllReviewsByUserId(int userId);
 }
