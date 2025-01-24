@@ -1,3 +1,5 @@
+import components.admin.AdminService;
+import models.Film;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,7 +14,8 @@ public class Main {
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connected");
-
+            Film film = new Film("alinur", "fantasy", 0, "Hz?");
+            AdminService adminService = new AdminService(connection);
         } catch (SQLException e) {
             System.out.println("Connection error:");
             e.printStackTrace();

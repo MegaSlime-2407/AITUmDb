@@ -4,39 +4,49 @@ import models.Film;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Scanner;
 import javax.sql.DataSource;
 
 public class AdminService {
-    private DataSource dataSource;
+    private Connection connection;
 
-    public AdminService(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public AdminService(Connection connection) {
+        this.connection = connection;
     }
 
-    public void addFilm(Film film) throws SQLException {
-        String sql = "INSERT INTO film (name, genre, rating, description) VALUES (?, ?, ?, ?)";
+    public void addFilm() throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter film title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter film genre: ");
+        String genre = scanner.nextLine();
+        System.out.print("Enter film description: ");
+        String description = scanner.nextLine();
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = "INSERT INTO films (name, genre, rating, description) VALUES (?, ?, 0, ?)";
 
-            pstmt.setString(1, film.getFilm_title());
-            pstmt.setString(2, film.getFilm_genre());
-            pstmt.setDouble(3, film.getFilm_rating());
-            pstmt.setString(4, film.getFilm_description());
+        try ( PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setString(1, title);
+            pstmt.setString(2, genre);
+            pstmt.setString(3, description);
 
             pstmt.executeUpdate();
+            System.out.println("Film added successfully");
         }
     }
 
-    public void deleteFilm(Film film) throws SQLException {
-        String sql = "DELETE FROM film WHERE film_id = ?";
+    public void deleteFilm() throws SQLException {
+        String sql = "DELETE FROM films WHERE filmid = ?";
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter film id: ");
+        String id = scanner.nextLine();
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, film.getFilm_id());
+            pstmt.setInt(1, Integer.parseInt(id));
 
             pstmt.executeUpdate();
+            System.out.println("Film deleted successfully");
         }
     }
 }
