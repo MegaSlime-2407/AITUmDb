@@ -7,11 +7,19 @@ public class Film {
     private double film_rating;
     private String film_description;
 
+    public Film() {
+
+    }
     public Film(String title, String genre, double rating, String description) {
         setFilm_title(title);
         setFilm_genre(genre);
         setFilm_rating(rating);
         setFilm_description(description);
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + film_title + ", " + "Genre: " + film_genre + ", " + "Rating: " + film_rating + ", Description: " + film_description + ", ID: " + film_id +"\n";
     }
 
     public int getFilm_id() {
@@ -44,4 +52,5 @@ public class Film {
     public void setFilm_description(String film_description) {
         this.film_description = film_description;
     }
+
 }
