@@ -21,7 +21,7 @@ public class UserServices {
         this.connection = connection;
     }
 
-    public boolean login() throws SQLException {
+    public int login() throws SQLException {
         String sql = "SELECT * FROM users where name=? and password=?";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your username: ");
@@ -34,11 +34,11 @@ public class UserServices {
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 System.out.println("Login successful, Welcome, " + username);
-                return true;
+                return resultSet.getInt("id");
             }
             else {
                 System.out.println("Wrong name or password, try again");
-                return false;
+                return 0;
             }
         }
     }
