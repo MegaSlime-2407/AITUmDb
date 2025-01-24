@@ -1,4 +1,6 @@
 import components.user.UserServices;
+import components.admin.AdminService;
+import models.Film;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +16,8 @@ public class Main {
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connected");
+
+            AdminService adminService = new AdminService(connection);
             UserServices userServices = new UserServices(connection);
         } catch (SQLException e) {
             System.out.println("Connection error:");
