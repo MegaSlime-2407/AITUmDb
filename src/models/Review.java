@@ -17,7 +17,7 @@ public class Review {
     }
 
     public String toString(){
-        return "ID: " + id + "\nFilm ID: " + product_id + "\nUser ID " + user_id + "\nDescription " + description + "\nRating: " + rating;
+        return "\nDescription " + description + "\nRating: " + rating;
     }
     public int getId() {
         return id;
