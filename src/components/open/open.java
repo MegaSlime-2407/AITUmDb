@@ -1,6 +1,6 @@
 package components.open;
 
 public interface open {
-    Movie getById(int product_id);
     List<Movie> getAll();
+    Movie getById(int product_id);
 }
