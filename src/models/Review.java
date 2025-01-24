@@ -7,6 +7,7 @@ public class Review {
     private String description;
     private double rating;
 
+    public Review() {}
     public Review(int id, int product_id, int user_id, String description, double rating) {
         setId(id);
         setProduct_id(product_id);
@@ -15,6 +16,9 @@ public class Review {
         setRating(rating);
     }
 
+    public String toString(){
+        return "ID: " + id + "\nFilm ID: " + product_id + "\nUser ID " + user_id + "\nDescription " + description + "\nRating: " + rating;
+    }
     public int getId() {
         return id;
     }
