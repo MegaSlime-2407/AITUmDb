@@ -55,7 +55,6 @@ public class UserServices {
                 total += resultSet.getDouble("rating");
                 count++;
             }
-            // Calculate the average rating if there are ratings available
             if (count > 0) {
                 double averageRating = total / count;
                 try (PreparedStatement preparedStatement2 = connection.prepareStatement(query)) {
