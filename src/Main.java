@@ -96,7 +96,8 @@ public class Main {
                                 }
                             }
                         } else if (userType.equals("2")) {
-                            if (userServices.login()) {
+                            int userId = userServices.login();
+                            if (userId!=0) {
                                 boolean userMenu = true;
                                 while (userMenu) {
                                     System.out.println("\n--- User Menu ---");
@@ -110,8 +111,6 @@ public class Main {
                                         case "1":
                                             System.out.print("Enter the ID of the movie to review: ");
                                             int productId = Integer.parseInt(scanner.nextLine());
-                                            System.out.print("Enter your user ID: ");
-                                            int userId = Integer.parseInt(scanner.nextLine());
                                             userServices.leaveReview(productId, userId);
                                             break;
                                         case "2":
