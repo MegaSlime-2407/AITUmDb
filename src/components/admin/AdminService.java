@@ -213,4 +213,17 @@ public class AdminService implements open  {
         }
         return users;
     }
+    public void deleteReview() throws SQLException {
+        String sql = "DELETE FROM usersreviews WHERE id = ?";
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter review id: ");
+        String id = scanner.nextLine();
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setInt(1, Integer.parseInt(id));
+
+            pstmt.executeUpdate();
+            System.out.println("Review deleted successfully");
+        }
+    }
 }
