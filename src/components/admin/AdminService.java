@@ -63,14 +63,18 @@ public class AdminService implements open  {
 
     public void deleteFilm() throws SQLException {
         String sql = "DELETE FROM films WHERE filmid = ?";
+        String sql2 = "DELETE FROM usersreviews WHERE product_id = ?";
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter film id: ");
         String id = scanner.nextLine();
         try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+            PreparedStatement pstmt2 = connection.prepareStatement(sql2);
+            pstmt2.setInt(1, Integer.parseInt(id));
 
             pstmt.setInt(1, Integer.parseInt(id));
 
             pstmt.executeUpdate();
+            pstmt2.executeUpdate();
             System.out.println("Film deleted successfully");
         }
     }
