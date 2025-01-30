@@ -12,4 +12,6 @@ public interface open {
     Film getFilmById() throws SQLException;
 
     List<Review> getAllReviewsByUserId() throws SQLException;
+
+    void deleteReview() throws SQLException;
 }

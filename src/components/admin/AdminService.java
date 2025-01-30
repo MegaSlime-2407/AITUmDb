@@ -63,14 +63,18 @@ public class AdminService implements open  {
 
     public void deleteFilm() throws SQLException {
         String sql = "DELETE FROM films WHERE filmid = ?";
+        String sql2 = "DELETE FROM usersreviews WHERE product_id = ?";
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter film id: ");
         String id = scanner.nextLine();
         try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+            PreparedStatement pstmt2 = connection.prepareStatement(sql2);
+            pstmt2.setInt(1, Integer.parseInt(id));
 
             pstmt.setInt(1, Integer.parseInt(id));
 
             pstmt.executeUpdate();
+            pstmt2.executeUpdate();
             System.out.println("Film deleted successfully");
         }
     }
@@ -214,6 +218,7 @@ public class AdminService implements open  {
         return users;
     }
 
+
     public void deleteUserByID() throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
         Scanner scanner = new Scanner(System.in);
@@ -230,6 +235,20 @@ public class AdminService implements open  {
             } else {
                 System.out.println("No user found with the given ID.");
             }
+        }
+    }
+
+    public void deleteReview() throws SQLException {
+        String sql = "DELETE FROM usersreviews WHERE id = ?";
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter review id: ");
+        String id = scanner.nextLine();
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)){
+
+            pstmt.setInt(1, Integer.parseInt(id));
+
+            pstmt.executeUpdate();
+            System.out.println("Review deleted successfully");
         }
     }
 }
