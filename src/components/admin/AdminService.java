@@ -217,6 +217,27 @@ public class AdminService implements open  {
         }
         return users;
     }
+
+
+    public void deleteUserByID() throws SQLException {
+        String sql = "DELETE FROM users WHERE id = ?";
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter user id: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User deleted successfully.");
+            } else {
+                System.out.println("No user found with the given ID.");
+            }
+        }
+    }
+
     public void deleteReview() throws SQLException {
         String sql = "DELETE FROM usersreviews WHERE id = ?";
         Scanner scanner = new Scanner(System.in);
