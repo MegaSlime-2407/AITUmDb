@@ -22,7 +22,6 @@ public class Menu {
         while (running) {
             System.out.println("\n--- MAIN MENU ---");
             System.out.println("1) Check all movies");
-            System.out.println("1.1) Choose and check all reviews of a specific movie");
             System.out.println("2) Login as user/admin");
             System.out.println("3) Exit from session");
             System.out.print("Choose an option: ");
@@ -30,9 +29,6 @@ public class Menu {
             switch (choice) {
                 case "1":
                     displayMovies();
-                    break;
-                case "1.1":
-                    displayReviews();
                     break;
                 case "2":
                     loginMenu();
@@ -53,15 +49,26 @@ public class Menu {
         for (Film film : films) {
             System.out.println(film);
         }
+
+        System.out.print("\nEnter the ID of the movie to check reviews (or 0 to go back): ");
+        int filmId = Integer.parseInt(scanner.nextLine());
+
+        if (filmId != 0) {
+            displayReviews(filmId);
+        } else {
+            System.out.println("Returning to the main menu...");
+        }
     }
 
-    private void displayReviews() throws SQLException {
-        System.out.print("Enter the ID of the movie to check reviews: ");
-        int filmId = Integer.parseInt(scanner.nextLine());
+    private void displayReviews(int filmId) throws SQLException {
         List<Review> reviews = userServices.getReviews(filmId);
-        System.out.println("\n--- Reviews ---");
-        for (Review review : reviews) {
-            System.out.println(review);
+        if (reviews.isEmpty()) {
+            System.out.println("No reviews found for this movie.");
+        } else {
+            System.out.println("\n--- Reviews ---");
+            for (Review review : reviews) {
+                System.out.println(review);
+            }
         }
     }
 
@@ -146,7 +153,7 @@ public class Menu {
 
     private void leaveReview(int userId) throws SQLException {
         System.out.print("Enter the ID of the movie to review: ");
-        int productId = Integer.parseInt(scanner.nextLine());
-        userServices.leaveReview(productId, userId);
+        int filmId = Integer.parseInt(scanner.nextLine());
+        userServices.leaveReview(filmId, userId);
     }
 }

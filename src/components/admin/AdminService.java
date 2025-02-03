@@ -103,7 +103,6 @@ public class AdminService implements open  {
                 }
             }
 
-            // Prompt the user for updates
             System.out.println("Current title: " + film.getFilm_title());
             System.out.print("Enter new title (leave blank to keep current): ");
             String newTitle = scanner.nextLine();
