@@ -11,132 +11,145 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        try {
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Connected to the database.");
-            AdminService adminService = new AdminService(connection);
-            UserServices userServices = new UserServices(connection);
-            Scanner scanner = new Scanner(System.in);
+            Connection connection = DatabaseConnection.getConnection();
 
-            boolean running = true;
-            while (running) {
-                System.out.println("\n--- MENU ---");
-                System.out.println("1) Check all movies");
-                System.out.println("1.1) Choose and check all reviews of a specific movie");
-                System.out.println("2) Login as user/admin");
-                System.out.println("3) Exit from session");
-                System.out.print("Choose an option: ");
+            if (connection != null) {
 
-                String choice = scanner.nextLine();
-                switch (choice) {
-                    case "1":
-                        List<Film> films = adminService.getFilms();
-                        System.out.println("\n--- All Movies ---");
-                        for (Film film : films) {
-                            System.out.println(film);
-                        }
-                        break;
+                System.out.println("Connected to the database.");
+                AdminService adminService = new AdminService(connection);
+                UserServices userServices = new UserServices(connection);
+                Scanner scanner = new Scanner(System.in);
 
-                    case "1.1":
-                        System.out.print("Enter the ID of the movie to check reviews: ");
-                        int filmId = Integer.parseInt(scanner.nextLine());
-                        List<Review> reviews = userServices.getReviews(filmId);
-                        System.out.println("\n--- Reviews ---");
-                        for (Review review : reviews) {
-                            System.out.println(review);
-                        }
-                        break;
+                boolean running = true;
+                while (running) {
+                    System.out.println("\n--- MENU ---");
+                    System.out.println("1) Check all movies");
+                    System.out.println("1.1) Choose and check all reviews of a specific movie");
+                    System.out.println("2) Login as user/admin");
+                    System.out.println("3) Exit from session");
+                    System.out.print("Choose an option: ");
 
-                    case "2":
-                        System.out.println("Login as:");
-                        System.out.println("1) Admin");
-                        System.out.println("2) User");
-                        System.out.print("Choose an option: ");
-                        String userType = scanner.nextLine();
+                    String choice = scanner.nextLine();
+                    switch (choice) {
+                        case "1":
+                            List<Film> films = adminService.getFilms();
+                            System.out.println("\n--- All Movies ---");
+                            for (Film film : films) {
+                                System.out.println(film);
+                            }
+                            break;
 
-                        if (userType.equals("1")) {
-                            if (adminService.login()) {
-                                boolean adminMenu = true;
-                                while (adminMenu) {
-                                    System.out.println("\n--- Admin Menu ---");
-                                    System.out.println("1) Add movie");
-                                    System.out.println("2) Get all movies");
-                                    System.out.println("3) Update movie");
-                                    System.out.println("4) Delete movie");
-                                    System.out.println("5) Logout");
-                                    System.out.print("Choose an option: ");
+                        case "1.1":
+                            System.out.print("Enter the ID of the movie to check reviews: ");
+                            int filmId = Integer.parseInt(scanner.nextLine());
+                            List<Review> reviews = userServices.getReviews(filmId);
+                            System.out.println("\n--- Reviews ---");
+                            for (Review review : reviews) {
+                                System.out.println(review);
+                            }
+                            break;
 
-                                    String adminChoice = scanner.nextLine();
-                                    switch (adminChoice) {
-                                        case "1":
-                                            adminService.addFilm();
-                                            break;
-                                        case "2":
-                                            List<Film> allMovies = adminService.getFilms();
-                                            System.out.println("\n--- All Movies ---");
-                                            for (Film film : allMovies) {
-                                                System.out.println(film);
-                                            }
-                                            break;
-                                        case "3":
-                                            adminService.updateFilm();
-                                            break;
-                                        case "4":
-                                            adminService.deleteFilm();
-                                            break;
-                                        case "5":
-                                            adminMenu = false;
-                                            break;
-                                        default:
-                                            System.out.println("Invalid choice. Try again.");
+                        case "2":
+                            System.out.println("Login as:");
+                            System.out.println("1) Admin");
+                            System.out.println("2) User");
+                            System.out.print("Choose an option: ");
+                            String userType = scanner.nextLine();
+
+                            if (userType.equals("1")) {
+                                if (adminService.login()) {
+                                    boolean adminMenu = true;
+                                    while (adminMenu) {
+                                        System.out.println("\n--- Admin Menu ---");
+                                        System.out.println("1) Add movie");
+                                        System.out.println("2) Get all movies");
+                                        System.out.println("3) Update movie");
+                                        System.out.println("4) Get all reviwes from specific user") ;
+                                        System.out.println("5) Delete movie");
+                                        System.out.println("6) Logout");
+                                        System.out.print("Choose an option: ");
+
+                                        String adminChoice = scanner.nextLine();
+                                        switch (adminChoice) {
+                                            case "1":
+                                                adminService.addFilm();
+                                                break;
+                                            case "2":
+                                                List<Film> allMovies = adminService.getFilms();
+                                                System.out.println("\n--- All Movies ---");
+                                                for (Film film : allMovies) {
+                                                    System.out.println(film);
+                                                }
+                                                break;
+                                            case "3":
+                                                adminService.updateFilm();
+                                                break;
+                                            case "4":
+                                                List<Review> allReviews = adminService.getAllReviewsByUserId();
+                                                System.out.println("\n--- All Reviews ---");
+                                                for ( Review review : allReviews) {
+                                                    System.out.println(review);
+                                                }
+                                                break;
+                                            case "5":
+                                                adminService.deleteFilm();
+                                                break;
+                                            case "6":
+                                                adminMenu = false;
+                                                break;
+                                            default:
+                                                System.out.println("Invalid choice. Try again.");
+                                        }
                                     }
                                 }
-                            }
-                        } else if (userType.equals("2")) {
-                            int userId = userServices.login();
-                            if (userId!=0) {
-                                boolean userMenu = true;
-                                while (userMenu) {
-                                    System.out.println("\n--- User Menu ---");
-                                    System.out.println("1) Leave a review");
-                                    System.out.println("2) Check all movies");
-                                    System.out.println("3) Logout");
-                                    System.out.print("Choose an option: ");
+                            } else if (userType.equals("2")) {
+                                int userId = userServices.login();
+                                if (userId!=0) {
+                                    boolean userMenu = true;
+                                    while (userMenu) {
+                                        System.out.println("\n--- User Menu ---");
+                                        System.out.println("1) Leave a review");
+                                        System.out.println("2) Check all movies");
+                                        System.out.println("3) Logout");
+                                        System.out.print("Choose an option: ");
 
-                                    String userChoice = scanner.nextLine();
-                                    switch (userChoice) {
-                                        case "1":
-                                            System.out.print("Enter the ID of the movie to review: ");
-                                            int productId = Integer.parseInt(scanner.nextLine());
-                                            userServices.leaveReview(productId, userId);
-                                            break;
-                                        case "2":
-                                            List<Film> movies = userServices.getFilms();
-                                            System.out.println("\n--- All Movies ---");
-                                            for (Film film : movies) {
-                                                System.out.println(film);
-                                            }
-                                            break;
-                                        case "3":
-                                            userMenu = false;
-                                            break;
-                                        default:
-                                            System.out.println("Invalid choice. Try again.");
+                                        String userChoice = scanner.nextLine();
+                                        switch (userChoice) {
+                                            case "1":
+                                                System.out.print("Enter the ID of the movie to review: ");
+                                                int productId = Integer.parseInt(scanner.nextLine());
+                                                userServices.leaveReview(productId, userId);
+                                                break;
+                                            case "2":
+                                                List<Film> movies = userServices.getFilms();
+                                                System.out.println("\n--- All Movies ---");
+                                                for (Film film : movies) {
+                                                    System.out.println(film);
+                                                }
+                                                break;
+                                            case "3":
+                                                userMenu = false;
+                                                break;
+                                            default:
+                                                System.out.println("Invalid choice. Try again.");
+                                        }
                                     }
                                 }
+                            } else {
+                                System.out.println("Invalid user type. Try again.");
                             }
-                        } else {
-                            System.out.println("Invalid user type. Try again.");
-                        }
-                        break;
+                            break;
 
-                    case "3":
-                        running = false;
-                        System.out.println("Exiting session. Goodbye!");
-                        break;
+                        case "3":
+                            running = false;
+                            System.out.println("Exiting session. Goodbye!");
+                            break;
 
-                    default:
-                        System.out.println("Invalid choice. Try again.");
+                        default:
+                            System.out.println("Invalid choice. Try again.");
+                    }
                 }
             }
         } catch (SQLException e) {
