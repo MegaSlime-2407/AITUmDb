@@ -1,5 +1,6 @@
 package components.user;
 
+import components.PasswordUtils;
 import models.Film;
 import models.Review;
 
@@ -22,26 +23,35 @@ public class UserServices {
     }
 
     public int login() throws SQLException {
-        String sql = "SELECT * FROM users where name=? and password=?";
+        String sql = "SELECT * FROM users WHERE name=?";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your username: ");
         String username = scanner.nextLine();
         System.out.println("Enter your password: ");
         String password = scanner.nextLine();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                System.out.println("Login successful, Welcome, " + username);
-                return resultSet.getInt("id");
-            }
-            else {
-                System.out.println("Wrong name or password, try again");
+
+            if (resultSet.next()) {
+                if (PasswordUtils.verifyPassword(password, resultSet.getString("password"))) {
+                    System.out.println("Login successful, Welcome, " + username);
+                    return resultSet.getInt("id");
+                } else {
+                    System.out.println("Wrong name or password, try again");
+                    return 0;
+                }
+            } else {
+                System.out.println("User not found.");
                 return 0;
             }
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
+            return 0;
         }
     }
+
 
     public void updateRating(int product_id) throws SQLException {
         String query = "UPDATE films SET rating = ? WHERE filmid = ?";
