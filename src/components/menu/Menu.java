@@ -1,5 +1,9 @@
+package components.menu;
+
+import components.user.User;
 import components.user.UserServices;
 import components.admin.AdminService;
+import components.open.OpenServices;
 import models.Film;
 import models.Review;
 import java.sql.SQLException;
@@ -10,8 +14,9 @@ public class Menu {
     private Scanner scanner;
     private AdminService adminService;
     private UserServices userServices;
+    private OpenServices openServices;
 
-    public Menu(AdminService adminService, UserServices userServices, Scanner scanner) {
+    public Menu(AdminService adminService, UserServices userServices, OpenServices openServices, Scanner scanner) {
         this.adminService = adminService;
         this.userServices = userServices;
         this.scanner = scanner;
@@ -44,7 +49,7 @@ public class Menu {
     }
 
     private void displayMovies() throws SQLException {
-        List<Film> films = adminService.getFilms();
+        List<Film> films = openServices.getFilms();
         System.out.println("\n--- All Movies ---");
         for (Film film : films) {
             System.out.println(film);
@@ -61,7 +66,7 @@ public class Menu {
     }
 
     private void displayReviews(int filmId) throws SQLException {
-        List<Review> reviews = userServices.getReviews(filmId);
+        List<Review> reviews = openServices.getReviews(filmId);
         if (reviews.isEmpty()) {
             System.out.println("No reviews found for this movie.");
         } else {
@@ -92,13 +97,14 @@ public class Menu {
         if (adminService.login()) {
             boolean adminMenu = true;
             while (adminMenu) {
-                System.out.println("\n--- Admin Menu ---");
+                System.out.println("\n--- Admin components.menu.Menu ---");
                 System.out.println("1) Add movie");
                 System.out.println("2) Get all movies");
                 System.out.println("3) Update movie");
                 System.out.println("4) Get all reviwes from specific user") ;
                 System.out.println("5) Delete movie");
-                System.out.println("6) Logout");
+                System.out.println("6) Get all users");
+                System.out.println("7) Logout");
                 System.out.print("Choose an option: ");
                 String adminChoice = scanner.nextLine();
                 switch (adminChoice) {
@@ -106,7 +112,7 @@ public class Menu {
                         adminService.addFilm();
                         break;
                     case "2":
-                        List<Film> allMovies = adminService.getFilms();
+                        List<Film> allMovies = openServices.getFilms();
                         System.out.println("\n--- All Movies ---");
                         for (Film film : allMovies) {
                             System.out.println(film);
@@ -126,6 +132,12 @@ public class Menu {
                         adminService.deleteFilm();
                         break;
                     case "6":
+                        List<String> allUsers = adminService.getAllUsers();
+                        System.out.println("\n--- All Users ---");
+                        for (String user : allUsers) {
+                            System.out.println(user);
+                        }
+                    case "7":
                         adminMenu = false;
                         break;
                     default:
@@ -140,7 +152,7 @@ public class Menu {
         if (userId != 0) {
             boolean userMenu = true;
             while (userMenu) {
-                System.out.println("\n--- User Menu ---");
+                System.out.println("\n--- User components.menu.Menu ---");
                 System.out.println("1) Leave a review");
                 System.out.println("2) Check all movies");
                 System.out.println("3) Logout");
@@ -148,7 +160,9 @@ public class Menu {
                 String userChoice = scanner.nextLine();
                 switch (userChoice) {
                     case "1":
-                        leaveReview(userId);
+                        System.out.print("Enter the ID of the movie to review: ");
+                        int filmId = Integer.parseInt(scanner.nextLine());
+                        userServices.leaveReview(filmId, userId);
                         break;
                     case "2":
                         displayMovies();
@@ -163,9 +177,5 @@ public class Menu {
         }
     }
 
-    private void leaveReview(int userId) throws SQLException {
-        System.out.print("Enter the ID of the movie to review: ");
-        int filmId = Integer.parseInt(scanner.nextLine());
-        userServices.leaveReview(filmId, userId);
-    }
+
 }
