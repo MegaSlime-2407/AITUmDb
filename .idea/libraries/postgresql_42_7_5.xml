@@ -4,6 +4,8 @@
       <root url="jar://$USER_HOME$/Downloads/postgresql-42.7.5.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/src" />
+    </SOURCES>
   </library>
 </component>

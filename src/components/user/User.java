@@ -9,7 +9,7 @@ public class User {
         setName(name);
         setPassword(password);
     }
-    public String toString(){
+    public String toString() {
         return "ID: "+ id + "\nName" + name;
     }
     public int getId() {
