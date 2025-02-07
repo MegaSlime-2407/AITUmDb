@@ -67,7 +67,8 @@ public class Main {
                                         System.out.println("2) Get all movies");
                                         System.out.println("3) Update movie");
                                         System.out.println("4) Delete movie");
-                                        System.out.println("5) Logout");
+                                        System.out.println("5) Delete user: ");
+                                        System.out.println("6) Logout");
                                         System.out.print("Choose an option: ");
 
                                         String adminChoice = scanner.nextLine();
@@ -89,6 +90,9 @@ public class Main {
                                                 adminService.deleteFilm();
                                                 break;
                                             case "5":
+                                                adminService.deleteUserByID();
+                                                break;
+                                            case "6":
                                                 adminMenu = false;
                                                 break;
                                             default:
