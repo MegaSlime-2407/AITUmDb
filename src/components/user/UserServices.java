@@ -1,47 +1,83 @@
 package components.user;
 
+import components.PasswordUtils;
 import models.Film;
 import models.Review;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class UserServices {
     private Connection connection;
+
     public UserServices(Connection connection) {
         this.connection = connection;
     }
 
     public int login() throws SQLException {
-        String sql = "SELECT * FROM users where name=? and password=?";
+        String sql = "SELECT id, password FROM users WHERE name=?";
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username: ");
+        System.out.print("Enter your username: ");
         String username = scanner.nextLine();
-        System.out.println("Enter your password: ");
+        System.out.print("Enter your password: ");
         String password = scanner.nextLine();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                System.out.println("Login successful, Welcome, " + username);
-                return resultSet.getInt("id");
-            }
-            else {
-                System.out.println("Wrong name or password, try again");
+
+            if (resultSet.next()) {
+                String storedHash = resultSet.getString("password");
+
+                if (PasswordUtils.verifyPassword(password, storedHash)) {
+                    System.out.println("Login successful, Welcome, " + username);
+                    return resultSet.getInt("id");
+                } else {
+                    System.out.println("Wrong name or password, try again");
+                    return 0;
+                }
+            } else {
+                System.out.println("User not found.");
                 return 0;
             }
         }
     }
+
+    public void register(String username, String password) throws SQLException {
+        if (isUserExist(username)) {
+            System.out.println("User already exists.");
+        } else {
+            addUserToDatabase(username, password);
+            System.out.println("User registered successfully.");
+        }
+    }
+
+    private boolean isUserExist(String username) throws SQLException {
+        String query = "SELECT COUNT(*) FROM users WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    private void addUserToDatabase(String username, String password) throws SQLException {
+        String query = "INSERT INTO users (name, password) VALUES (?, ?)";
+        String hashedPassword = PasswordUtils.hashPassword(password);
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, hashedPassword); // Сохраняем только хэшированный пароль
+            preparedStatement.executeUpdate();
+        }
+    }
+
 
     public void updateRating(int product_id) throws SQLException {
         String query = "UPDATE films SET rating = ? WHERE filmid = ?";
@@ -81,41 +117,42 @@ public class UserServices {
         }
     }
 
-
-    public void register(String username, String password) throws SQLException {
-        if (isUserExist(username)) {
-            System.out.println("User already exists"); }
-            else {
-            addUserToDatabase(username, password);
-            System.out.println("User registered successfully.");
+    public List<Film> getFilms() throws SQLException {
+        String sql = "SELECT * FROM films";
+        List<Film> films = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Film film = new Film();
+                film.setFilm_id(resultSet.getInt("filmid"));
+                film.setFilm_title(resultSet.getString("name"));
+                film.setFilm_genre(resultSet.getString("genre"));
+                film.setFilm_rating(resultSet.getDouble("rating"));
+                film.setFilm_description(resultSet.getString("description"));
+                films.add(film);
+            }
         }
+        return films;
     }
 
-    private boolean isUserExist(String username) throws SQLException {
-        String query = "SELECT * FROM users WHERE name = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-    preparedStatement.setString(1, username);
-    ResultSet resultSet = preparedStatement.executeQuery();
-    if (resultSet.next()) {
-        return resultSet.getInt(1) > 0;
-    }
-    }
-        return false;
-    }
-
-    private void addUserToDatabase(String username, String password) {
-        String query = "INSERT INTO users (name, password) VALUES (?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1,username);
-            preparedStatement.setString(2, username);
-            preparedStatement.executeUpdate();
+    public List<Review> getReviews(int film_id) throws SQLException {
+        String sql = "SELECT * FROM usersreviews WHERE product_id = ?";
+        List<Review> reviews = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, film_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Review review = new Review();
+                review.setId(resultSet.getInt("id"));
+                review.setProduct_id(resultSet.getInt("product_id"));
+                review.setUser_id(resultSet.getInt("user_id"));
+                review.setDescription(resultSet.getString("description"));
+                review.setRating(resultSet.getDouble("rating"));
+                reviews.add(review);
+            }
         }
-catch (SQLException e) {
-            e.printStackTrace();
-
-}
+        return reviews;
     }
-
 }
 
 

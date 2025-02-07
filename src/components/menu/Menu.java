@@ -29,6 +29,7 @@ public class Menu {
             System.out.println("1) Check all movies");
             System.out.println("2) Login as user/admin");
             System.out.println("3) Exit from session");
+            System.out.println("4) Register as a user");
             System.out.print("Choose an option: ");
             String choice = scanner.nextLine();
             switch (choice) {
@@ -41,6 +42,13 @@ public class Menu {
                 case "3":
                     running = false;
                     System.out.println("Exiting session. Goodbye!");
+                    break;
+                case "4":
+                    System.out.print("Enter a username: ");
+                    String username = scanner.nextLine();
+                    System.out.print("Enter a password: ");
+                    String password = scanner.nextLine();
+                    userServices.register(username, password);
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
