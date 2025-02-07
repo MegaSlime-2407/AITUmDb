@@ -2,14 +2,16 @@ package models;
 // asd
 public class Review {
     private int id;
+    private String name;
     private int product_id;
     private int user_id;
     private String description;
     private double rating;
 
     public Review() {}
-    public Review(int id, int product_id, int user_id, String description, double rating) {
+    public Review(int id,String name, int product_id, int user_id, String description, double rating) {
         setId(id);
+        setName(name);
         setProduct_id(product_id);
         setUser_id(user_id);
         setDescription(description);
@@ -17,7 +19,7 @@ public class Review {
     }
 
     public String toString(){
-        return "\nDescription " + description + "\nRating: " + rating;
+        return "\nFilm id " + product_id + "\nName" +name + "\nDescription " + description + "\nRating: " + rating;
     }
     public int getId() {
         return id;
@@ -26,6 +28,10 @@ public class Review {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
 
     public int getProduct_id() {
         return product_id;

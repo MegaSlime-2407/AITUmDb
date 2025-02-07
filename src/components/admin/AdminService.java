@@ -1,5 +1,4 @@
 package components.admin;
-import components.open.open;
 import models.Film;
 import models.Review;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class AdminService implements open  {
+public class AdminService   {
     private Connection connection;
 
     public AdminService(Connection connection) {
@@ -103,7 +102,6 @@ public class AdminService implements open  {
                 }
             }
 
-            // Prompt the user for updates
             System.out.println("Current title: " + film.getFilm_title());
             System.out.print("Enter new title (leave blank to keep current): ");
             String newTitle = scanner.nextLine();
@@ -143,49 +141,12 @@ public class AdminService implements open  {
             }
         }
 
-    @Override
-    public List<Film> getFilms() throws SQLException {
-        String sql = "SELECT * FROM films";
-        List<Film> films = new ArrayList<>();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Film film = new Film();
-                film.setFilm_id(resultSet.getInt("filmid"));
-                film.setFilm_title(resultSet.getString("name"));
-                film.setFilm_genre(resultSet.getString("genre"));
-                film.setFilm_rating(resultSet.getDouble("rating"));
-                film.setFilm_description(resultSet.getString("description"));
-                films.add(film);
-            }
-        }
-        return films;
-    }
-
-
-    @Override
-    public Film getFilmById() throws SQLException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter film id: ");
-        String id = scanner.nextLine();
-        String sql = "SELECT * FROM films WHERE filmid = ?";
-        Film film = new Film();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
-            preparedStatement.setInt(1, Integer.parseInt(id));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                film.setFilm_id(resultSet.getInt("filmid"));
-                film.setFilm_title(resultSet.getString("name"));
-                film.setFilm_genre(resultSet.getString("genre"));
-                film.setFilm_rating(resultSet.getDouble("rating"));
-                film.setFilm_description(resultSet.getString("description"));
-            }
-        }
-        return film;
-}
-    @Override
     public List<Review> getAllReviewsByUserId() throws SQLException {
-        String sql = "SELECT * FROM usersreviews WHERE user_id = ?";
+        String sql = "SELECT ur.*, m.name AS movie_name " +
+                "FROM usersreviews ur " +
+                "JOIN films m ON ur.product_id = m.filmid " +
+                "WHERE ur.user_id = ?";
+        String sql1 = "SELECT * FROM usersreviews WHERE user_id = ?";
         List<Review> reviews = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter user id: ");
@@ -200,6 +161,7 @@ public class AdminService implements open  {
                 review.setUser_id(resultSet.getInt("user_id"));
                 review.setDescription(resultSet.getString("description"));
                 review.setRating(resultSet.getDouble("rating"));
+                review.setName(resultSet.getString("movie_name"));
                 reviews.add(review);
             }
         }
@@ -221,19 +183,23 @@ public class AdminService implements open  {
 
     public void deleteUserByID() throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
+        String delete = "DELETE FROM usersreviews WHERE user_id = ?";
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter user id: ");
         int userId = scanner.nextInt();
         scanner.nextLine();
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            int rowsAffected = pstmt.executeUpdate();
+            try (PreparedStatement deleteStmt = connection.prepareStatement(delete)) {
+                pstmt.setInt(1, userId);
+                int rowsAffected = pstmt.executeUpdate();
+                deleteStmt.setInt(1, userId);
 
-            if (rowsAffected > 0) {
-                System.out.println("User deleted successfully.");
-            } else {
-                System.out.println("No user found with the given ID.");
+                if (rowsAffected > 0) {
+                    System.out.println("User deleted successfully.");
+                } else {
+                    System.out.println("No user found with the given ID.");
+                }
             }
         }
     }

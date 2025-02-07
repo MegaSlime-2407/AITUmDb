@@ -26,6 +26,7 @@ public class UserServices {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
@@ -102,12 +103,12 @@ public class UserServices {
     }
 
     public void leaveReview(int product_id, int user_id) throws SQLException {
-        String query = "INSERT INTO usersreviews(product_id, user_id, description, rating) VALUES (?,?,?,?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String query = "INSERT into usersreviews(product_id, user_id, description, rating) VALUES (?,?,?,?)";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Please enter the review description: ");
+            System.out.println("Please enter the review description: ");
             preparedStatement.setString(3, scanner.nextLine());
-            System.out.print("Please enter the review rating: ");
+            System.out.println("Please enter the review rating: ");
             preparedStatement.setDouble(4, Double.parseDouble(scanner.next()));
             preparedStatement.setInt(1, product_id);
             preparedStatement.setInt(2, user_id);
@@ -153,3 +154,19 @@ public class UserServices {
         return reviews;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
