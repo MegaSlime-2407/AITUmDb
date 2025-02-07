@@ -1,7 +1,16 @@
+import components.admin.AdminAuthServices;
+import components.admin.AdminAuthServicesI;
+import components.film.FilmServices;
+import components.film.FilmServicesI;
 import components.menu.Menu;
-import components.open.OpenServices;
+import components.review.ReviewServices;
+import components.review.ReviewServicesI;
 import components.user.UserServices;
-import components.admin.AdminService;
+import components.user.UserServicesI;
+import components.utils.AuthServices;
+import components.utils.AuthServicesI;
+import components.utils.DatabaseConnection;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -10,18 +19,20 @@ public class Main {
     public static void main(String[] args) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            if(connection != null) {
+            if (connection != null) {
                 System.out.println("Connected to the database.");
-                AdminService adminService = new AdminService(connection);
-                UserServices userServices = new UserServices(connection);
-                OpenServices openServices = new OpenServices(connection);
+                AdminAuthServicesI adminAuthService = new AdminAuthServices(connection);
+                AuthServicesI authService = new AuthServices(connection);
+                FilmServicesI filmService = new FilmServices(connection);
+                ReviewServicesI reviewService = new ReviewServices(connection);
+                UserServicesI userService = new UserServices(connection);
                 Scanner scanner = new Scanner(System.in);
 
-                Menu menu = new Menu(adminService, userServices,openServices, scanner);
+                Menu menu = new Menu(adminAuthService,authService, filmService, reviewService, userService, scanner);
                 menu.displayMainMenu();
+            } else {
+                System.out.println("You are not connected to the database.");
             }
-            else System.out.printf("You are not connected to the database.%n");
-
         } catch (SQLException e) {
             System.out.println("Connection error:");
             e.printStackTrace();
