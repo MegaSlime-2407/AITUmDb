@@ -66,9 +66,8 @@ public class Main {
                                         System.out.println("1) Add movie");
                                         System.out.println("2) Get all movies");
                                         System.out.println("3) Update movie");
-                                        System.out.println("4) Get all reviwes from specific user") ;
-                                        System.out.println("5) Delete movie");
-                                        System.out.println("6) Logout");
+                                        System.out.println("4) Delete movie");
+                                        System.out.println("5) Logout");
                                         System.out.print("Choose an option: ");
 
                                         String adminChoice = scanner.nextLine();
@@ -87,16 +86,9 @@ public class Main {
                                                 adminService.updateFilm();
                                                 break;
                                             case "4":
-                                                List<Review> allReviews = adminService.getAllReviewsByUserId();
-                                                System.out.println("\n--- All Reviews ---");
-                                                for ( Review review : allReviews) {
-                                                    System.out.println(review);
-                                                }
-                                                break;
-                                            case "5":
                                                 adminService.deleteFilm();
                                                 break;
-                                            case "6":
+                                            case "5":
                                                 adminMenu = false;
                                                 break;
                                             default:
