@@ -68,16 +68,15 @@ public class UserServices {
 
     private void addUserToDatabase(String username, String password) throws SQLException {
         String query = "INSERT INTO users (name, password) VALUES (?, ?)";
-        String hashedPassword = PasswordUtils.hashPassword(password); // Хэшируем пароль
+        String hashedPassword = PasswordUtils.hashPassword(password);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, hashedPassword);
+            preparedStatement.setString(2, hashedPassword); // Сохраняем только хэшированный пароль
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error while adding user: " + e.getMessage());
         }
     }
+
 
     public void updateRating(int product_id) throws SQLException {
         String query = "UPDATE films SET rating = ? WHERE filmid = ?";
