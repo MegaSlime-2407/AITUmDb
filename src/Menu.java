@@ -25,6 +25,7 @@ public class Menu {
             System.out.println("1.1) Choose and check all reviews of a specific movie");
             System.out.println("2) Login as user/admin");
             System.out.println("3) Exit from session");
+            System.out.println("4) Register as a user");
             System.out.print("Choose an option: ");
             String choice = scanner.nextLine();
             switch (choice) {
@@ -40,6 +41,9 @@ public class Menu {
                 case "3":
                     running = false;
                     System.out.println("Exiting session. Goodbye!");
+                    break;
+                case "4": // ✅ Вызываем меню регистрации
+                    registerMenu();
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
@@ -148,5 +152,14 @@ public class Menu {
         System.out.print("Enter the ID of the movie to review: ");
         int productId = Integer.parseInt(scanner.nextLine());
         userServices.leaveReview(productId, userId);
+    }
+
+
+    private void registerMenu() throws SQLException {
+        System.out.print("Enter a username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter a password: ");
+        String password = scanner.nextLine();
+        userServices.register(username, password);
     }
 }
