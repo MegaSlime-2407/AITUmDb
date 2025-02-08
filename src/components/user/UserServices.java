@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServices implements UserServicesI {
+public class UserServices implements IUserServices {
     private final Connection connection;
 
     public UserServices(Connection connection) {

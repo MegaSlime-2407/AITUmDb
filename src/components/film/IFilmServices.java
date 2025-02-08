@@ -5,7 +5,7 @@ import models.Film;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface FilmServicesI {
+public interface IFilmServices {
     List<Film> getFilms() throws SQLException;
     Film getFilmById(int filmId) throws SQLException;
     void addFilm(Film film) throws SQLException;

@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmServices implements FilmServicesI {
+public class FilmServices implements IFilmServices {
     private final Connection connection;
 
     public FilmServices(Connection connection) {

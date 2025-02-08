@@ -1,14 +1,14 @@
 import components.admin.AdminAuthServices;
-import components.admin.AdminAuthServicesI;
+import components.admin.IAdminAuthServices;
 import components.film.FilmServices;
-import components.film.FilmServicesI;
+import components.film.IFilmServices;
 import components.menu.Menu;
 import components.review.ReviewServices;
-import components.review.ReviewServicesI;
+import components.review.IReviewServices;
 import components.user.UserServices;
-import components.user.UserServicesI;
+import components.user.IUserServices;
 import components.utils.AuthServices;
-import components.utils.AuthServicesI;
+import components.utils.IAuthServices;
 import components.utils.DatabaseConnection;
 
 import java.sql.Connection;
@@ -21,11 +21,11 @@ public class Main {
             Connection connection = DatabaseConnection.getConnection();
             if (connection != null) {
                 System.out.println("Connected to the database.");
-                AdminAuthServicesI adminAuthService = new AdminAuthServices(connection);
-                AuthServicesI authService = new AuthServices(connection);
-                FilmServicesI filmService = new FilmServices(connection);
-                ReviewServicesI reviewService = new ReviewServices(connection);
-                UserServicesI userService = new UserServices(connection);
+                IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
+                IAuthServices authService = new AuthServices(connection);
+                IFilmServices filmService = new FilmServices(connection);
+                IReviewServices reviewService = new ReviewServices(connection);
+                IUserServices userService = new UserServices(connection);
                 Scanner scanner = new Scanner(System.in);
 
                 Menu menu = new Menu(adminAuthService,authService, filmService, reviewService, userService, scanner);

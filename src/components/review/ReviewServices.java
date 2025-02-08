@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewServices implements ReviewServicesI {
+public class ReviewServices implements IReviewServices {
     private final Connection connection;
 
     public ReviewServices(Connection connection) {

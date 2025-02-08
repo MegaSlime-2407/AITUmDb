@@ -1,5 +1,5 @@
 package components.admin;
 
-public interface AdminAuthServicesI {
+public interface IAdminAuthServices {
     boolean login(String username, String password);
 }

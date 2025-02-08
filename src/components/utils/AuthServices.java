@@ -2,7 +2,7 @@ package components.utils;
 
 import java.sql.*;
 
-public class AuthServices implements AuthServicesI {
+public class AuthServices implements IAuthServices {
     private final Connection connection;
 
     public AuthServices(Connection connection) {
