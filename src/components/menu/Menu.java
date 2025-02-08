@@ -176,9 +176,7 @@ public class Menu {
                         }
                         break;
                     case "4":
-                        System.out.print("Enter user id: ");
-                        int userId = Integer.parseInt(scanner.nextLine());
-                        List<Review> allReviews = reviewService.getReviews(userId);
+                        List<Review> allReviews = reviewService.getAllReviewsByUserID();
                         System.out.println("\n--- All Reviews ---");
                         for (Review review : allReviews) {
                             System.out.println(review);
