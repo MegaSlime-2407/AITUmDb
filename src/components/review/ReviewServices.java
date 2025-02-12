@@ -61,7 +61,7 @@ public class ReviewServices implements IReviewServices {
     }
 
     @Override
-    public void leaveReview(int productId, int userId, String description, double rating) throws SQLException {
+    public boolean leaveReview(int productId, int userId, String description, double rating) throws SQLException {
         String sql = "INSERT INTO usersreviews (product_id, user_id, description, rating) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, productId);
@@ -71,10 +71,11 @@ public class ReviewServices implements IReviewServices {
             preparedStatement.executeUpdate();
             updateRating(productId);
         }
+        return false;
     }
 
     @Override
-    public void updateRating(int productId) throws SQLException {
+    public boolean updateRating(int productId) throws SQLException {
         String query = "UPDATE films SET rating = ? WHERE filmid = ?";
         String query2 = "SELECT rating FROM usersreviews WHERE product_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query2)) {
@@ -95,5 +96,6 @@ public class ReviewServices implements IReviewServices {
                 }
             }
         }
+        return false;
     }
 }

@@ -51,7 +51,7 @@ public class FilmServices implements IFilmServices {
     }
 
     @Override
-    public void addFilm(Film film) throws SQLException {
+    public boolean addFilm(Film film) throws SQLException {
         String sql = "INSERT INTO films (name, genre, rating, description) VALUES (?, ?, 0, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, film.getFilm_title());
@@ -60,10 +60,11 @@ public class FilmServices implements IFilmServices {
             pstmt.executeUpdate();
             System.out.println("Film added successfully");
         }
+        return false;
     }
 
     @Override
-    public void deleteFilm(int filmId) throws SQLException {
+    public boolean deleteFilm(int filmId) throws SQLException {
         String sql = "DELETE FROM films WHERE filmid = ?";
         String sql2 = "DELETE FROM usersreviews WHERE product_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -74,10 +75,11 @@ public class FilmServices implements IFilmServices {
             pstmt2.executeUpdate();
             System.out.println("Film deleted successfully");
         }
+        return false;
     }
 
     @Override
-    public void updateFilm(Film film) throws SQLException {
+    public boolean updateFilm(Film film) throws SQLException {
         String sql = "UPDATE films SET name = ?, genre = ?, description = ? WHERE filmid = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, film.getFilm_title());
@@ -87,5 +89,6 @@ public class FilmServices implements IFilmServices {
             pstmt.executeUpdate();
             System.out.println("Film updated successfully");
         }
+        return false;
     }
 }

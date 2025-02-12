@@ -1,5 +1,7 @@
 package components.utils;
 
+import models.User;
+
 import java.sql.*;
 
 public class AuthServices implements IAuthServices {
@@ -31,16 +33,17 @@ public class AuthServices implements IAuthServices {
     }
 
     @Override
-    public void register(String username, String password) throws SQLException {
+    public int register(String username, String password) throws SQLException {
         if (isUserExist(username)) {
             System.out.println("User already exists.");
         } else {
             addUserToDatabase(username, password);
             System.out.println("User registered successfully.");
         }
+        return 0;
     }
 
-    private boolean isUserExist(String username) throws SQLException {
+    public boolean isUserExist(String username) throws SQLException {
         String query = "SELECT COUNT(*) FROM users WHERE name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, username);
@@ -49,7 +52,7 @@ public class AuthServices implements IAuthServices {
         }
     }
 
-    private void addUserToDatabase(String username, String password) throws SQLException {
+    public void addUserToDatabase(String username, String password) throws SQLException {
         String query = "INSERT INTO users (name, password) VALUES (?, ?)";
         String hashedPassword = PasswordUtils.hashPassword(password);
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -57,6 +60,10 @@ public class AuthServices implements IAuthServices {
             preparedStatement.setString(2, hashedPassword);
             preparedStatement.executeUpdate();
         }
+    }
+
+    public boolean register(User user) {
+        return false;
     }
 }
 
