@@ -12,30 +12,33 @@ import components.utils.IAuthServices;
 import components.utils.DatabaseConnection;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            Connection connection = DatabaseConnection.getConnection();
+            Connection connection = DatabaseConnection.getInstance().getConnection();
             if (connection != null) {
                 System.out.println("Connected to the database.");
-                IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
-                IAuthServices authService = new AuthServices(connection);
-                IFilmServices filmService = new FilmServices(connection);
-                IReviewServices reviewService = new ReviewServices(connection);
-                IUserServices userService = new UserServices(connection);
-                Scanner scanner = new Scanner(System.in);
-
-                Menu menu = new Menu(adminAuthService,authService, filmService, reviewService, userService, scanner);
+                Menu menu = getMenu();
                 menu.displayMainMenu();
             } else {
                 System.out.println("You are not connected to the database.");
             }
-        } catch (SQLException e) {
-            System.out.println("Connection error:");
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Connection error: " + e.getMessage());
         }
+    }
+
+    private static Menu getMenu() {
+        Connection connection = DatabaseConnection.getInstance().getConnection();
+        IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
+        IAuthServices authService = new AuthServices(connection);
+        IFilmServices filmService = new FilmServices(connection);
+        IReviewServices reviewService = new ReviewServices(connection);
+        IUserServices userService = new UserServices(connection);
+        Scanner scanner = new Scanner(System.in);
+
+        return new Menu(adminAuthService, authService, filmService, reviewService, userService, scanner);
     }
 }
