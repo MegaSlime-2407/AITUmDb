@@ -1,6 +1,7 @@
 package components.film;
 
 import models.Film;
+import components.observers.Observer;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,57 +9,66 @@ import java.util.List;
 
 public class FilmServices implements IFilmServices {
     private final Connection connection;
+    private final List<Observer> observers = new ArrayList<>();
 
     public FilmServices(Connection connection) {
         this.connection = connection;
     }
 
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers(int filmId) {
+        for (Observer observer : observers) {
+            observer.update(filmId);
+        }
+    }
+
     @Override
     public List<Film> getFilms() throws SQLException {
-        String sql = "SELECT * FROM films";
-        List<Film> films = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Film film = new Film();
-                film.setFilm_id(resultSet.getInt("filmid"));
-                film.setFilm_title(resultSet.getString("name"));
-                film.setFilm_genre(resultSet.getString("genre"));
-                film.setFilm_rating(resultSet.getDouble("rating"));
-                film.setFilm_description(resultSet.getString("description"));
-                films.add(film);
-            }
-        }
-        return films;
+        return List.of();
     }
 
     @Override
     public Film getFilmById(int filmId) throws SQLException {
-        String sql = "SELECT * FROM films WHERE filmid = ?";
-        Film film = new Film();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, filmId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                film.setFilm_id(resultSet.getInt("filmid"));
-                film.setFilm_title(resultSet.getString("name"));
-                film.setFilm_genre(resultSet.getString("genre"));
-                film.setFilm_rating(resultSet.getDouble("rating"));
-                film.setFilm_description(resultSet.getString("description"));
-            }
-        }
-        return film;
+        return null;
     }
 
     @Override
     public void addFilm(Film film) throws SQLException {
         String sql = "INSERT INTO films (name, genre, rating, description) VALUES (?, ?, 0, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, film.getFilm_title());
             pstmt.setString(2, film.getFilm_genre());
             pstmt.setString(3, film.getFilm_description());
             pstmt.executeUpdate();
+
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int filmId = generatedKeys.getInt(1);
+                notifyObservers(filmId);
+            }
+
             System.out.println("Film added successfully");
+        }
+    }
+
+    @Override
+    public void updateFilm(Film film) throws SQLException {
+        String sql = "UPDATE films SET name = ?, genre = ?, description = ? WHERE filmid = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, film.getFilm_title());
+            pstmt.setString(2, film.getFilm_genre());
+            pstmt.setString(3, film.getFilm_description());
+            pstmt.setInt(4, film.getFilm_id());
+            pstmt.executeUpdate();
+            notifyObservers(film.getFilm_id());
+            System.out.println("Film updated successfully");
         }
     }
 
@@ -72,20 +82,9 @@ public class FilmServices implements IFilmServices {
             pstmt2.setInt(1, filmId);
             pstmt.executeUpdate();
             pstmt2.executeUpdate();
+            notifyObservers(filmId);
             System.out.println("Film deleted successfully");
         }
     }
-
-    @Override
-    public void updateFilm(Film film) throws SQLException {
-        String sql = "UPDATE films SET name = ?, genre = ?, description = ? WHERE filmid = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, film.getFilm_title());
-            pstmt.setString(2, film.getFilm_genre());
-            pstmt.setString(3, film.getFilm_description());
-            pstmt.setInt(4, film.getFilm_id());
-            pstmt.executeUpdate();
-            System.out.println("Film updated successfully");
-        }
-    }
 }
+

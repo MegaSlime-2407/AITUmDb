@@ -1,16 +1,27 @@
 package components.review;
 
 import models.Review;
+import components.observers.Observer;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewServices implements IReviewServices {
+public class ReviewServices implements IReviewServices, Observer {
     private final Connection connection;
 
     public ReviewServices(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void update(int filmId) {
+        try {
+            updateRating(filmId);
+            System.out.println("Updated rating for film ID: " + filmId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
