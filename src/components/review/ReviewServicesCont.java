@@ -5,7 +5,7 @@ import models.Review;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ReviewServicesCont implements IReviewServicesCont{
+public class ReviewServicesCont implements IReviewServices{
     private final IReviewServices repo;
     public ReviewServicesCont(final IReviewServices repo) {
         this.repo = repo;

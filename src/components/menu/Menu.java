@@ -1,10 +1,5 @@
 package components.menu;
 
-import components.admin.IAdminAuthServicesCont;
-import components.film.IFilmServicesCont;
-import components.review.IReviewServicesCont;
-import components.user.IUserServicesCont;
-import components.utils.IAuthServicesCont;
 import models.Film;
 import models.Review;
 import java.sql.SQLException;
@@ -12,15 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private final IUserServicesCont userServiceCont;
-    private final IFilmServicesCont filmServiceCont;
-    private final IReviewServicesCont reviewServiceCont;
-    private final IAdminAuthServicesCont adminAuthServicesCont;
-    private final IAuthServicesCont authServicesCont;
+    private final IUserServices userServiceCont;
+    private final IFilmServices filmServiceCont;
+    private final IReviewServices reviewServiceCont;
+    private final IAdminAuthServices adminAuthServicesCont;
+    private final IAuthServices authServicesCont;
 
     private final Scanner scanner;
 
-    public Menu(IUserServicesCont userServiceCont, IFilmServicesCont filmServiceCont, IReviewServicesCont reviewServiceCont, IAdminAuthServicesCont adminAuthServicesCont, IAuthServicesCont authServicesCont, Scanner scanner) {
+    public Menu(IUserServices userServiceCont, IFilmServices filmServiceCont, IReviewServices reviewServiceCont, IAdminAuthServices ServicesCont, IAuthServices authServicesCont, Scanner scanner) {
         this.userServiceCont = userServiceCont;
         this.filmServiceCont = filmServiceCont;
         this.reviewServiceCont = reviewServiceCont;

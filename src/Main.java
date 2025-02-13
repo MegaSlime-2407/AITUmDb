@@ -1,17 +1,13 @@
-import components.admin.AdminAuthServices;
+import components.admin.AdminAuthServicesRepo;
 import components.admin.AdminAuthServicesCont;
 import components.admin.IAdminAuthServices;
-import components.admin.IAdminAuthServicesCont;
-import components.film.FilmServices;
+import components.film.FilmServicesRepo;
 import components.film.FilmServicesCont;
 import components.film.IFilmServices;
-import components.film.IFilmServicesCont;
 import components.menu.Menu;
-import components.review.IReviewServicesCont;
-import components.review.ReviewServices;
+import components.review.ReviewServicesRepo;
 import components.review.IReviewServices;
 import components.review.ReviewServicesCont;
-import components.user.IUserServicesCont;
 import components.user.UserServices;
 import components.user.IUserServices;
 import components.user.UserServicesCont;
@@ -27,17 +23,17 @@ public class Main {
             Connection connection = DatabaseConnection.getConnection();
             if (connection != null) {
                 System.out.println("Connected to the database.");
-                IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
-                IAuthServices authService = new AuthServices(connection);
-                IFilmServices filmService = new FilmServices(connection);
-                IReviewServices reviewService = new ReviewServices(connection);
+                IAdminAuthServices adminAuthService = new AdminAuthServicesRepo(connection);
+                IAuthServices authService = new AuthServicesRepo(connection);
+                IFilmServices filmService = new FilmServicesRepo(connection);
+                IReviewServices reviewService = new ReviewServicesRepo(connection);
                 IUserServices userService = new UserServices(connection);
 
-                IUserServicesCont userServiceCont = new UserServicesCont(userService);
-                IFilmServicesCont filmServiceCont = new FilmServicesCont(filmService);
-                IReviewServicesCont reviewServiceCont = new ReviewServicesCont(reviewService);
-                IAdminAuthServicesCont adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
-                IAuthServicesCont authServicesCont = new AuthServicesCont(authService);
+                IUserServices userServiceCont = new UserServicesCont(userService);
+                IFilmServices filmServiceCont = new FilmServicesCont(filmService);
+                IReviewServices reviewServiceCont = new ReviewServicesCont(reviewService);
+                IAdminAuthServices adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
+                IAuthServices authServicesCont = new AuthServicesCont(authService);
 
                 Scanner scanner = new Scanner(System.in);
 

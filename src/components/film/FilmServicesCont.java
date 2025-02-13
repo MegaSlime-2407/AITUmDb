@@ -6,7 +6,7 @@ import models.Film;
 import java.sql.SQLException;
 import java.util.List;
 
-public class FilmServicesCont implements IFilmServicesCont {
+public class FilmServicesCont implements IFilmServices {
 
     private final IFilmServices repo;
     public FilmServicesCont(final IFilmServices repo) {
