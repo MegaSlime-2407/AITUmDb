@@ -4,7 +4,7 @@ import models.User;
 
 import java.sql.SQLException;
 
-public class AuthServicesCont implements IAuthServicesCont {
+public class AuthServicesCont implements IAuthServices {
     private final IAuthServices repo;
     public AuthServicesCont(final IAuthServices repo) {
         this.repo = repo;

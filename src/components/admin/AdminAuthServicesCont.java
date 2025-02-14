@@ -1,6 +1,6 @@
 package components.admin;
 
-public class AdminAuthServicesCont implements IAdminAuthServicesCont {
+public class AdminAuthServicesCont implements IAdminAuthServices {
     private final IAdminAuthServices repo;
     public AdminAuthServicesCont(final IAdminAuthServices repo) {
         this.repo = repo;

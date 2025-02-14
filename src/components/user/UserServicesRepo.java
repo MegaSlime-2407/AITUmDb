@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServices implements IUserServices {
+public class UserServicesRepo implements IUserServices {
     private final Connection connection;
 
-    public UserServices(Connection connection) {
+    public UserServicesRepo(Connection connection) {
         this.connection = connection;
     }
 

@@ -6,10 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmServices implements IFilmServices {
+public class FilmServicesRepo implements IFilmServices {
     private final Connection connection;
 
-    public FilmServices(Connection connection) {
+    public FilmServicesRepo(Connection connection) {
         this.connection = connection;
     }
 

@@ -1,10 +1,5 @@
 package components.user;
 
-import components.review.IReviewServices;
-import components.review.IReviewServicesCont;
-import models.Review;
-import models.User;
-
 import java.sql.SQLException;
 import java.util.List;
 
