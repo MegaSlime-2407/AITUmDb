@@ -1,16 +1,14 @@
-package components.user;
+package models;
 
-public class User {
+public class Admin {
     private int id;
     private String name;
     private String password;
-    public User(int id, String name, String password) {
+
+    public Admin(int id, String name, String password) {
         setId(id);
         setName(name);
         setPassword(password);
-    }
-    public String toString() {
-        return "ID: "+ id + "\nName" + name;
     }
     public int getId() {
         return id;
@@ -25,11 +23,9 @@ public class User {
         this.name = name;
     }
     public String getPassword() {
-
         return password;
     }
     public void setPassword(String password) {
         this.password = password;
     }
-
 }
