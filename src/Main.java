@@ -1,7 +1,22 @@
+import components.admin.AdminAuthServices;
+import components.admin.AdminAuthServicesCont;
+import components.admin.IAdminAuthServices;
+import components.admin.IAdminAuthServicesCont;
+import components.film.FilmServices;
+import components.film.FilmServicesCont;
+import components.film.IFilmServices;
+import components.film.IFilmServicesCont;
 import components.menu.Menu;
-import components.open.OpenServices;
+import components.review.IReviewServicesCont;
+import components.review.ReviewServices;
+import components.review.IReviewServices;
+import components.review.ReviewServicesCont;
+import components.user.IUserServicesCont;
 import components.user.UserServices;
-import components.admin.AdminService;
+import components.user.IUserServices;
+import components.user.UserServicesCont;
+import components.utils.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -10,18 +25,27 @@ public class Main {
     public static void main(String[] args) {
         try {
             Connection connection = DatabaseConnection.getConnection();
-            if(connection != null) {
+            if (connection != null) {
                 System.out.println("Connected to the database.");
-                AdminService adminService = new AdminService(connection);
-                UserServices userServices = new UserServices(connection);
-                OpenServices openServices = new OpenServices(connection);
+                IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
+                IAuthServices authService = new AuthServices(connection);
+                IFilmServices filmService = new FilmServices(connection);
+                IReviewServices reviewService = new ReviewServices(connection);
+                IUserServices userService = new UserServices(connection);
+
+                IUserServicesCont userServiceCont = new UserServicesCont(userService);
+                IFilmServicesCont filmServiceCont = new FilmServicesCont(filmService);
+                IReviewServicesCont reviewServiceCont = new ReviewServicesCont(reviewService);
+                IAdminAuthServicesCont adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
+                IAuthServicesCont authServicesCont = new AuthServicesCont(authService);
+
                 Scanner scanner = new Scanner(System.in);
 
-                Menu menu = new Menu(adminService, userServices,openServices, scanner);
+                Menu menu = new Menu(userServiceCont, filmServiceCont, reviewServiceCont, adminAuthServicesCont, authServicesCont, scanner);
                 menu.displayMainMenu();
+            } else {
+                System.out.println("You are not connected to the database.");
             }
-            else System.out.printf("You are not connected to the database.%n");
-
         } catch (SQLException e) {
             System.out.println("Connection error:");
             e.printStackTrace();
