@@ -1,5 +1,10 @@
 package components.menu;
 
+import components.admin.IAdminAuthServices;
+import components.film.IFilmServices;
+import components.review.IReviewServices;
+import components.user.IUserServices;
+import components.utils.IAuthServices;
 import models.Film;
 import models.Review;
 import java.sql.SQLException;
@@ -15,7 +20,7 @@ public class Menu {
 
     private final Scanner scanner;
 
-    public Menu(IUserServices userServiceCont, IFilmServices filmServiceCont, IReviewServices reviewServiceCont, IAdminAuthServices ServicesCont, IAuthServices authServicesCont, Scanner scanner) {
+    public Menu(IUserServices userServiceCont, IFilmServices filmServiceCont, IReviewServices reviewServiceCont, IAdminAuthServices adminAuthServicesCont, IAuthServices authServicesCont, Scanner scanner) {
         this.userServiceCont = userServiceCont;
         this.filmServiceCont = filmServiceCont;
         this.reviewServiceCont = reviewServiceCont;
@@ -30,8 +35,8 @@ public class Menu {
             System.out.println("\n--- MAIN MENU ---");
             System.out.println("1) Check all movies");
             System.out.println("2) Login as user/admin");
-            System.out.println("3) Exit from session");
-            System.out.println("4) Register as a user");
+            System.out.println("3) Register as a user");
+            System.out.println("4) Exit from session");
             System.out.print("Choose an option: ");
             String choice = scanner.nextLine();
             switch (choice) {
@@ -41,11 +46,11 @@ public class Menu {
                 case "2":
                     loginMenu();
                     break;
-                case "3":
+                case "4":
                     running = false;
                     System.out.println("Exiting session. Goodbye!");
                     break;
-                case "4":
+                case "3":
                     System.out.print("Enter a username: ");
                     String username = scanner.nextLine();
                     System.out.print("Enter a password: ");
