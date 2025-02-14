@@ -10,13 +10,9 @@ public class ReviewServicesCont implements IReviewServicesCont{
     public ReviewServicesCont(final IReviewServices repo) {
         this.repo = repo;
     }
-    public String getReviews(int filmId) throws SQLException {
+    public List<Review> getReviews(int filmId) throws SQLException {
         List<Review> reviews = repo.getReviews(filmId);
-        StringBuilder sb = new StringBuilder();
-        for (Review review : reviews) {
-            sb.append(review.toString()).append("\n");
-        }
-        return sb.toString();
+        return reviews;
     }
     public List <Review> getAllReviewsByUserID() throws SQLException{
 
