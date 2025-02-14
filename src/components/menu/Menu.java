@@ -1,10 +1,5 @@
 package components.menu;
 
-import components.admin.IAdminAuthServices;
-import components.film.IFilmServices;
-import components.review.IReviewServices;
-import components.user.IUserServices;
-import components.utils.IAuthServices;
 import models.Film;
 import models.Review;
 import java.sql.SQLException;
@@ -12,19 +7,20 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private final IAdminAuthServices adminAuthServices;
-    private final IAuthServices authService;
-    private final IFilmServices filmService;
-    private final IReviewServices reviewService;
-    private final IUserServices userService;
+    private final IUserServices userServiceCont;
+    private final IFilmServices filmServiceCont;
+    private final IReviewServices reviewServiceCont;
+    private final IAdminAuthServices adminAuthServicesCont;
+    private final IAuthServices authServicesCont;
+
     private final Scanner scanner;
 
-    public Menu(IAdminAuthServices adminAuthServices, IAuthServices authService, IFilmServices filmService, IReviewServices reviewService, IUserServices userService, Scanner scanner) {
-        this.adminAuthServices = adminAuthServices;
-        this.authService = authService;
-        this.filmService = filmService;
-        this.reviewService = reviewService;
-        this.userService = userService;
+    public Menu(IUserServices userServiceCont, IFilmServices filmServiceCont, IReviewServices reviewServiceCont, IAdminAuthServices ServicesCont, IAuthServices authServicesCont, Scanner scanner) {
+        this.userServiceCont = userServiceCont;
+        this.filmServiceCont = filmServiceCont;
+        this.reviewServiceCont = reviewServiceCont;
+        this.adminAuthServicesCont = adminAuthServicesCont;
+        this.authServicesCont = authServicesCont;
         this.scanner = scanner;
     }
 
@@ -54,7 +50,7 @@ public class Menu {
                     String username = scanner.nextLine();
                     System.out.print("Enter a password: ");
                     String password = scanner.nextLine();
-                    authService.register(username, password);
+                    authServicesCont.register(username, password);
                     break;
                 default:
                     System.out.println("Invalid choice. Try again.");
@@ -63,7 +59,7 @@ public class Menu {
     }
 
     private void displayMovies() throws SQLException {
-        List<Film> films = filmService.getFilms();
+        List<Film> films = filmServiceCont.getFilms();
         System.out.println("\n--- All Movies ---");
         for (Film film : films) {
             System.out.println(film);
@@ -80,7 +76,7 @@ public class Menu {
     }
 
     private void displayReviews(int filmId) throws SQLException {
-        List<Review> reviews = reviewService.getReviews(filmId);
+        List<Review> reviews = reviewServiceCont.getReviews(filmId);
         if (reviews.isEmpty()) {
             System.out.println("No reviews found for this movie.");
         } else {
@@ -113,7 +109,7 @@ public class Menu {
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        if (adminAuthServices.login(username, password)) {
+        if (adminAuthServicesCont.login(username, password)) {
             boolean adminMenu = true;
             while (adminMenu) {
                 System.out.println("\n--- Admin Menu ---");
@@ -135,10 +131,10 @@ public class Menu {
                         System.out.print("Enter film description: ");
                         String description = scanner.nextLine();
                         Film film = new Film(title, genre, 0, description);
-                        filmService.addFilm(film);
+                        filmServiceCont.addFilm(film);
                         break;
                     case "2":
-                        List<Film> allMovies = filmService.getFilms();
+                        List<Film> allMovies = filmServiceCont.getFilms();
                         System.out.println("\n--- All Movies ---");
                         for (Film f : allMovies) {
                             System.out.println(f);
@@ -147,7 +143,7 @@ public class Menu {
                     case "3":
                         System.out.print("Enter film ID: ");
                         int filmId = Integer.parseInt(scanner.nextLine());
-                        Film filmToUpdate = filmService.getFilmById(filmId);
+                        Film filmToUpdate = filmServiceCont.getFilmById(filmId);
                         if (filmToUpdate != null) {
                             System.out.println("Current title: " + filmToUpdate.getFilm_title());
                             System.out.print("Enter new title (leave blank to keep current): ");
@@ -170,13 +166,13 @@ public class Menu {
                                 filmToUpdate.setFilm_description(newDescription);
                             }
 
-                            filmService.updateFilm(filmToUpdate);
+                            filmServiceCont.updateFilm(filmToUpdate);
                         } else {
                             System.out.println("No film found with the given ID.");
                         }
                         break;
                     case "4":
-                        List<Review> allReviews = reviewService.getAllReviewsByUserID();
+                        List<Review> allReviews = reviewServiceCont.getAllReviewsByUserID();
                         System.out.println("\n--- All Reviews ---");
                         for (Review review : allReviews) {
                             System.out.println(review);
@@ -185,10 +181,10 @@ public class Menu {
                     case "5":
                         System.out.print("Enter film id: ");
                         int filmIdToDelete = Integer.parseInt(scanner.nextLine());
-                        filmService.deleteFilm(filmIdToDelete);
+                        filmServiceCont.deleteFilm(filmIdToDelete);
                         break;
                     case "6":
-                        List<String> allUsers = userService.getAllUsers();
+                        List<String> allUsers = userServiceCont.getAllUsers();
                         System.out.println("\n--- All Users ---");
                         for (String user : allUsers) {
                             System.out.println(user);
@@ -210,7 +206,7 @@ public class Menu {
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        int userId = authService.login(username, password);
+        int userId = authServicesCont.login(username, password);
         if (userId != 0) {
             boolean userMenu = true;
             while (userMenu) {
@@ -228,7 +224,7 @@ public class Menu {
                         String description = scanner.nextLine();
                         System.out.print("Enter the review rating: ");
                         double rating = Double.parseDouble(scanner.nextLine());
-                        reviewService.leaveReview(filmId, userId, description, rating);
+                        reviewServiceCont.leaveReview(filmId, userId, description, rating);
                         break;
                     case "2":
                         displayMovies();

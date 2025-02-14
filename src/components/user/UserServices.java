@@ -26,7 +26,7 @@ public class UserServices implements IUserServices {
     }
 
     @Override
-    public void deleteUserById(int userId) throws SQLException {
+    public boolean deleteUserById(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
         String delete = "DELETE FROM usersreviews WHERE user_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -37,5 +37,6 @@ public class UserServices implements IUserServices {
             deleteStmt.executeUpdate();
             System.out.println("User deleted successfully.");
         }
+        return false;
     }
 }

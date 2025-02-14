@@ -1,15 +1,17 @@
-import components.admin.AdminAuthServices;
+import components.admin.AdminAuthServicesRepo;
+import components.admin.AdminAuthServicesCont;
 import components.admin.IAdminAuthServices;
-import components.film.FilmServices;
+import components.film.FilmServicesRepo;
+import components.film.FilmServicesCont;
 import components.film.IFilmServices;
 import components.menu.Menu;
-import components.review.ReviewServices;
+import components.review.ReviewServicesRepo;
 import components.review.IReviewServices;
+import components.review.ReviewServicesCont;
 import components.user.UserServices;
 import components.user.IUserServices;
-import components.utils.AuthServices;
-import components.utils.IAuthServices;
-import components.utils.DatabaseConnection;
+import components.user.UserServicesCont;
+import components.utils.*;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -20,6 +22,17 @@ public class Main {
             Connection connection = DatabaseConnection.getInstance().getConnection();
             if (connection != null) {
                 System.out.println("Connected to the database.");
+
+
+                IUserServices userServiceCont = new UserServicesCont(userService);
+                IFilmServices filmServiceCont = new FilmServicesCont(filmService);
+                IReviewServices reviewServiceCont = new ReviewServicesCont(reviewService);
+                IAdminAuthServices adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
+                IAuthServices authServicesCont = new AuthServicesCont(authService);
+
+                Scanner scanner = new Scanner(System.in);
+
+                Menu menu = new Menu(userServiceCont, filmServiceCont, reviewServiceCont, adminAuthServicesCont, authServicesCont, scanner);
                 Menu menu = getMenu();
                 menu.displayMainMenu();
             } else {

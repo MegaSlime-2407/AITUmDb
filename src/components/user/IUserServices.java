@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface IUserServices {
     List<String> getAllUsers() throws SQLException;
-    void deleteUserById(int userId) throws SQLException;
+    boolean deleteUserById(int userId) throws SQLException;
 }
