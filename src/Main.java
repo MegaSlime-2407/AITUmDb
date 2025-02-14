@@ -26,22 +26,7 @@ public class Main {
             Connection connection = DatabaseConnection.getInstance().getConnection();
             if (connection != null) {
                 System.out.println("Connected to the database.");
-
-                IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
-                IAuthServices authService = new AuthServices(connection);
-                IFilmServices filmService = new FilmServices(connection);
-                IReviewServices reviewService = new ReviewServices(connection);
-                IUserServices userService = new UserServices(connection);
-
-                IUserServicesCont userServiceCont = new UserServicesCont(userService);
-                IFilmServicesCont filmServiceCont = new FilmServicesCont(filmService);
-                IReviewServicesCont reviewServiceCont = new ReviewServicesCont(reviewService);
-                IAdminAuthServicesCont adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
-                IAuthServicesCont authServicesCont = new AuthServicesCont(authService);
-
-                Scanner scanner = new Scanner(System.in);
-
-                Menu menu = new Menu(userServiceCont, filmServiceCont, reviewServiceCont, adminAuthServicesCont, authServicesCont, scanner);
+                Menu menu = getMenu(connection);
                 menu.displayMainMenu();
             } else {
                 System.out.println("You are not connected to the database.");
@@ -51,15 +36,19 @@ public class Main {
         }
     }
 
-    private static Menu getMenu() {
-        Connection connection = DatabaseConnection.getInstance().getConnection();
+    private static Menu getMenu(Connection connection) {
         IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
         IAuthServices authService = new AuthServices(connection);
         IFilmServices filmService = new FilmServices(connection);
         IReviewServices reviewService = new ReviewServices(connection);
         IUserServices userService = new UserServices(connection);
-        Scanner scanner = new Scanner(System.in);
 
-        return new Menu(adminAuthService, authService, filmService, reviewService, userService, scanner);
+        IUserServicesCont userServiceCont = new UserServicesCont(userService);
+        IFilmServicesCont filmServiceCont = new FilmServicesCont(filmService);
+        IReviewServicesCont reviewServiceCont = new ReviewServicesCont(reviewService);
+        IAdminAuthServicesCont adminAuthServicesCont = new AdminAuthServicesCont(adminAuthService);
+        IAuthServicesCont authServicesCont = new AuthServicesCont(authService);
+        Scanner scanner = new Scanner(System.in);
+        return new Menu(userServiceCont, filmServiceCont, reviewServiceCont, adminAuthServicesCont, authServicesCont, scanner);
     }
 }
