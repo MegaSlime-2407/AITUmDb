@@ -5,6 +5,7 @@ import models.Review;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ReviewServices implements IReviewServices {
     private final Connection connection;
@@ -32,9 +33,35 @@ public class ReviewServices implements IReviewServices {
         }
         return reviews;
     }
+    @Override
+    public List<Review> getAllReviewsByUserID() throws SQLException{
+        String sql = "SELECT ur.*, m.name AS movie_name "+
+                "FROM usersreviews ur "+
+                "JOIN films m ON ur.product_id = m.filmid " +
+                "WHERE ur.user_id=?";
+        List<Review> reviews = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter user id:");
+        int userId = Integer.parseInt(scanner.nextLine());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Review review = new Review();
+                review.setId(resultSet.getInt("id"));
+                review.setProduct_id(resultSet.getInt("product_id"));
+                review.setUser_id(resultSet.getInt("user_id"));
+                review.setDescription(resultSet.getString("description"));
+                review.setRating(resultSet.getDouble("rating"));
+                review.setName(resultSet.getString("movie_name"));
+                reviews.add(review);
+            }
+        }
+        return reviews;
+    }
 
     @Override
-    public void leaveReview(int productId, int userId, String description, double rating) throws SQLException {
+    public boolean leaveReview(int productId, int userId, String description, double rating) throws SQLException {
         String sql = "INSERT INTO usersreviews (product_id, user_id, description, rating) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, productId);
@@ -44,10 +71,11 @@ public class ReviewServices implements IReviewServices {
             preparedStatement.executeUpdate();
             updateRating(productId);
         }
+        return false;
     }
 
     @Override
-    public void updateRating(int productId) throws SQLException {
+    public boolean updateRating(int productId) throws SQLException {
         String query = "UPDATE films SET rating = ? WHERE filmid = ?";
         String query2 = "SELECT rating FROM usersreviews WHERE product_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query2)) {
@@ -68,5 +96,6 @@ public class ReviewServices implements IReviewServices {
                 }
             }
         }
+        return false;
     }
 }
