@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServices implements IUserServices {
+public class UserServicesRepo implements IUserServicesRepo {
     private final Connection connection;
 
-    public UserServices(Connection connection) {
+    public UserServicesRepo(Connection connection) {
         this.connection = connection;
     }
 
@@ -28,13 +28,11 @@ public class UserServices implements IUserServices {
     @Override
     public boolean deleteUserById(int userId) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
-        String delete = "DELETE FROM usersreviews WHERE user_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql);
-             PreparedStatement deleteStmt = connection.prepareStatement(delete)) {
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql))
+            {
             pstmt.setInt(1, userId);
-            deleteStmt.setInt(1, userId);
             pstmt.executeUpdate();
-            deleteStmt.executeUpdate();
             System.out.println("User deleted successfully.");
         }
         return false;

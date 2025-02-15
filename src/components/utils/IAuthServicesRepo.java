@@ -1,10 +1,8 @@
 package components.utils;
 
-import models.User;
-
 import java.sql.SQLException;
 
-public interface IAuthServices {
+public interface IAuthServicesRepo {
     int login(String username, String password) throws SQLException;
     int register(String username, String password) throws SQLException;
     boolean isUserExist(String username) throws SQLException;

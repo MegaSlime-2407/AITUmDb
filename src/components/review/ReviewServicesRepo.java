@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ReviewServices implements IReviewServices {
+public class ReviewServicesRepo implements IReviewServicesRepo {
     private final Connection connection;
 
-    public ReviewServices(Connection connection) {
+    public ReviewServicesRepo(Connection connection) {
         this.connection = connection;
     }
 

@@ -2,10 +2,10 @@ package components.admin;
 
 import java.sql.*;
 
-public class AdminAuthServices implements IAdminAuthServices {
+public class AdminAuthServicesRepo implements IAdminAuthServicesRepo {
     private final Connection connection;
 
-    public AdminAuthServices(Connection connection) {
+    public AdminAuthServicesRepo(Connection connection) {
         this.connection = connection;
     }
 

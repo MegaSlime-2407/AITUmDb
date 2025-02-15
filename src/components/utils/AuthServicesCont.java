@@ -5,8 +5,8 @@ import models.User;
 import java.sql.SQLException;
 
 public class AuthServicesCont implements IAuthServicesCont {
-    private final IAuthServices repo;
-    public AuthServicesCont(final IAuthServices repo) {
+    private final IAuthServicesRepo repo;
+    public AuthServicesCont(final IAuthServicesRepo repo) {
         this.repo = repo;
     }
     public int login(String username, String password) throws SQLException {

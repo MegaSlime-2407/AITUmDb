@@ -1,6 +1,5 @@
 package components.film;
 
-import components.film.IFilmServices;
 import models.Film;
 
 import java.sql.SQLException;
@@ -8,8 +7,8 @@ import java.util.List;
 
 public class FilmServicesCont implements IFilmServicesCont {
 
-    private final IFilmServices repo;
-    public FilmServicesCont(final IFilmServices repo) {
+    private final IFilmServicesRepo repo;
+    public FilmServicesCont(final IFilmServicesRepo repo) {
         this.repo = repo;
     }
 

@@ -1,17 +1,12 @@
 package components.user;
 
-import components.review.IReviewServices;
-import components.review.IReviewServicesCont;
-import models.Review;
-import models.User;
-
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserServicesCont implements IUserServicesCont {
-    private final IUserServices repo;
+    private final IUserServicesRepo repo;
 
-    public UserServicesCont(final IUserServices repo) {
+    public UserServicesCont(final IUserServicesRepo repo) {
         this.repo = repo;
     }
 

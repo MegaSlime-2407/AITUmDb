@@ -4,10 +4,10 @@ import models.User;
 
 import java.sql.*;
 
-public class AuthServices implements IAuthServices {
+public class AuthServicesRepo implements IAuthServicesRepo {
     private final Connection connection;
 
-    public AuthServices(Connection connection) {
+    public AuthServicesRepo(Connection connection) {
         this.connection = connection;
     }
 

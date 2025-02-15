@@ -1,19 +1,19 @@
-import components.admin.AdminAuthServices;
+import components.admin.AdminAuthServicesRepo;
 import components.admin.AdminAuthServicesCont;
-import components.admin.IAdminAuthServices;
+import components.admin.IAdminAuthServicesRepo;
 import components.admin.IAdminAuthServicesCont;
-import components.film.FilmServices;
+import components.film.FilmServicesRepo;
 import components.film.FilmServicesCont;
-import components.film.IFilmServices;
+import components.film.IFilmServicesRepo;
 import components.film.IFilmServicesCont;
 import components.menu.Menu;
 import components.review.IReviewServicesCont;
-import components.review.ReviewServices;
-import components.review.IReviewServices;
+import components.review.ReviewServicesRepo;
+import components.review.IReviewServicesRepo;
 import components.review.ReviewServicesCont;
 import components.user.IUserServicesCont;
-import components.user.UserServices;
-import components.user.IUserServices;
+import components.user.UserServicesRepo;
+import components.user.IUserServicesRepo;
 import components.user.UserServicesCont;
 import components.utils.*;
 
@@ -37,11 +37,11 @@ public class Main {
     }
 
     private static Menu getMenu(Connection connection) {
-        IAdminAuthServices adminAuthService = new AdminAuthServices(connection);
-        IAuthServices authService = new AuthServices(connection);
-        IFilmServices filmService = new FilmServices(connection);
-        IReviewServices reviewService = new ReviewServices(connection);
-        IUserServices userService = new UserServices(connection);
+        IAdminAuthServicesRepo adminAuthService = new AdminAuthServicesRepo(connection);
+        IAuthServicesRepo authService = new AuthServicesRepo(connection);
+        IFilmServicesRepo filmService = new FilmServicesRepo(connection);
+        IReviewServicesRepo reviewService = new ReviewServicesRepo(connection);
+        IUserServicesRepo userService = new UserServicesRepo(connection);
 
         IUserServicesCont userServiceCont = new UserServicesCont(userService);
         IFilmServicesCont filmServiceCont = new FilmServicesCont(filmService);

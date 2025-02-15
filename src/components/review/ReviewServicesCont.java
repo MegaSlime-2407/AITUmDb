@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ReviewServicesCont implements IReviewServicesCont{
-    private final IReviewServices repo;
-    public ReviewServicesCont(final IReviewServices repo) {
+    private final IReviewServicesRepo repo;
+    public ReviewServicesCont(final IReviewServicesRepo repo) {
         this.repo = repo;
     }
     public List<Review> getReviews(int filmId) throws SQLException {
